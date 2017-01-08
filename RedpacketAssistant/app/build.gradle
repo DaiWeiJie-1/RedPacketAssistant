@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.antfortune.freeline'
 
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "accessibilityservice.dwj.com.redpacketassistant"
+        applicationId "redpacket_accessibilityservice.dwj.com.redpacketassistant"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1

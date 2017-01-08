@@ -33,7 +33,7 @@
 
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/accessibilityservice"
+                android:resource="@xml/redpacket_accessibilityservice"
                 />
         </service>
     </application>

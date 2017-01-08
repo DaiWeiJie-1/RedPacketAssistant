@@ -1,0 +1,107 @@
+{
+    "android_gradle_plugin_version": "2.1.2",
+    "apk_path": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\build\\outputs\\apk\\app-debug.apk",
+    "apt": {
+        
+    },
+    "apt_libraries": {
+        "dagger": false,
+        "butterknife": false
+    },
+    "auto_dependency": true,
+    "build_cache_dir": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\build\\freeline",
+    "build_directory": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\build",
+    "build_script": "gradlew.bat :app:assembleDebug",
+    "build_script_work_directory": "",
+    "build_tools_directory": "E:\\CodeSoftWare\\AndroidSDK\\build-tools\\24.0.0",
+    "build_tools_version": "24.0.0",
+    "compile_sdk_directory": "E:\\CodeSoftWare\\AndroidSDK\\platforms\\android-24",
+    "compile_sdk_version": "android-24",
+    "databinding": [
+        
+    ],
+    "databinding_compiler_jar": "",
+    "databinding_modules": [
+        
+    ],
+    "debug_package": "redpacket_accessibilityservice.dwj.com.redpacketassistant",
+    "exclude_dep_res_paths": [
+        
+    ],
+    "extra_dep_res_paths": [
+        
+    ],
+    "freeline_cache_dir": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant",
+    "freeline_gradle_plugin_version": "0.8.4",
+    "java_home": "E:\\CodeSoftWare\\Android Studio\\jre",
+    "launcher": "redpacket.dwj.com.redpacketassistant.MainActivity",
+    "main_assets_directory": [
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\assets",
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\assets"
+    ],
+    "main_jniLibs_directory": [
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\jniLibs",
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\jniLibs"
+    ],
+    "main_jni_directory": [
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\jni",
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\jni"
+    ],
+    "main_manifest_path": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\AndroidManifest.xml",
+    "main_project_dir": "app",
+    "main_project_name": "app",
+    "main_r_path": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\build\\generated\\source\\r\\debug\\R.java",
+    "main_res_directory": [
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\res",
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\res"
+    ],
+    "main_src_directory": [
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\java",
+        "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\java"
+    ],
+    "module_dependencies": {
+        "app": [
+            
+        ]
+    },
+    "modules": [
+        {
+            "name": "app",
+            "path": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app"
+        }
+    ],
+    "package": "redpacket.dwj.com.redpacketassistant",
+    "product_flavor": "",
+    "project_source_sets": {
+        "app": {
+            "main_assets_directory": [
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\assets",
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\assets"
+            ],
+            "main_jniLibs_directory": [
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\jniLibs",
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\jniLibs"
+            ],
+            "main_jni_directory": [
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\jni",
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\jni"
+            ],
+            "main_manifest_path": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\AndroidManifest.xml",
+            "main_res_directory": [
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\res",
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\res"
+            ],
+            "main_src_directory": [
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\debug\\java",
+                "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant\\app\\src\\main\\java"
+            ]
+        }
+    },
+    "project_type": "gradle",
+    "retrolambda": {
+        
+    },
+    "root_dir": "G:\\Github\\Mine\\RedPacketAssistant\\RedpacketAssistant",
+    "sdk_directory": "E:\\CodeSoftWare\\AndroidSDK",
+    "use_jdk8": false
+}
