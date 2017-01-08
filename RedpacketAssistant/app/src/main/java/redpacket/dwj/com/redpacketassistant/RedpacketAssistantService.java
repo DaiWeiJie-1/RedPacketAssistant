@@ -9,8 +9,8 @@ import android.os.Build;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -25,10 +25,35 @@ public class RedpacketAssistantService extends AccessibilityService{
     private static final String TALK_DETAIL_ACTIVITY_NAME = "com.tencent.mm.ui.LauncherUI";
 
     /**
+     * 红包界面
+     */
+    private static final String REDPACKET_ACTIVITY_NAME = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI";
+
+    /**
      * View描述
      * 对话详情界面中有返回imageview,description为"返回"
      */
-    private static final String VIEW_DESCRIPTION_BACK_TALK_DETALI_ACTIVITY = "返回";
+    private static final String VIEW_DESCRIPTION_BACK_TALK_DETAIL_ACTIVITY = "返回";
+
+    /**
+     * View textContent
+     * 对话详情界面中的领取红包view
+     */
+    private static final String VIEW_TEXT_REDPACKET_TALK_DETAIL_ACTIVITY = "领取红包";
+
+    /**
+     * 红包界面判断未开红包
+     */
+    private static final String VIEW_TEXT_UNOPEND_REDPACKET = "给你发了一个红包";
+
+    private AccessibilityUtil mUtil;
+
+    @Override
+    protected void onServiceConnected() {
+        super.onServiceConnected();
+        mUtil = AccessibilityUtil.getInstance();
+        mUtil.init(this);
+    }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
@@ -49,8 +74,15 @@ public class RedpacketAssistantService extends AccessibilityService{
                 Log.d(TAG,"TYPE_WINDOW_STATE_CHANGED,event class = " + accessibilityEvent.getClassName());
                 boolean isTalkActivity = isTalkDetailActivity(accessibilityEvent);
                 Log.d(TAG,"is Talkactivity = " + isTalkActivity);
-                if(isTalkActivity){
-                    performHomeBtn();
+
+                boolean isReaPacketActivity = isRedpacketActivity(accessibilityEvent);
+                if(isReaPacketActivity){
+                    boolean isUnopendRedpacket = isUnOpendRedPacket(getRootInActiveWindow());
+                    if(isUnopendRedpacket){
+                        Log.d(TAG,"This is unopend redpacket !!!!!!!!!!!!");
+                        openRedPacket();
+                        mUtil.performHomeBtn();
+                    }
                 }
 
                 break;
@@ -58,6 +90,11 @@ public class RedpacketAssistantService extends AccessibilityService{
                 Log.d(TAG,"TYPE_WINDOW_CONTENT_CHANGED");
                 boolean talkActivity = isTalkDetailActivity(accessibilityEvent);
                 Log.d(TAG,"TYPE_WINDOW_CONTENT_CHANGED is Talkactivity = " + talkActivity);
+
+                AccessibilityNodeInfo nodeInfo = mUtil.searchViewInvertOrderByText(getRootInActiveWindow(), "领取红包");
+                if(nodeInfo != null){
+                    mUtil.performClick(nodeInfo);
+                }
                 break;
 
             case AccessibilityEvent.TYPE_VIEW_SCROLLED:
@@ -117,8 +154,8 @@ public class RedpacketAssistantService extends AccessibilityService{
         if(event != null && TALK_DETAIL_ACTIVITY_NAME.equals(event.getClassName().toString())){
             Log.d(TAG,"class name = " + TALK_DETAIL_ACTIVITY_NAME);
             AccessibilityNodeInfo activeWindow = getRootInActiveWindow();
-            AccessibilityNodeInfo nodeInfo = searchViewByDescription(activeWindow, VIEW_DESCRIPTION_BACK_TALK_DETALI_ACTIVITY);
-            if(nodeInfo != null && isTargetViewType(nodeInfo, ImageView.class)){
+            AccessibilityNodeInfo nodeInfo = mUtil.searchViewPositiveSeqByDescription(activeWindow, VIEW_DESCRIPTION_BACK_TALK_DETAIL_ACTIVITY);
+            if(nodeInfo != null && mUtil.isTargetViewType(nodeInfo, ImageView.class)){
                 return true;
             }
 
@@ -127,6 +164,45 @@ public class RedpacketAssistantService extends AccessibilityService{
         }
         return false;
     }
+
+    private boolean isRedpacketActivity(AccessibilityEvent event){
+        if(event != null && REDPACKET_ACTIVITY_NAME.equals(event.getClassName().toString())){
+            return true;
+        }else{
+            Log.d(TAG,"class node is not red packet, class name = " + event.getClassName().toString());
+            return false;
+        }
+    }
+
+    /**
+     * 红包是否开启
+     * @param rootNode
+     * @return
+     */
+    private boolean isUnOpendRedPacket(AccessibilityNodeInfo rootNode){
+        if(rootNode != null){
+            AccessibilityNodeInfo nodeInfo = mUtil.searchViewInvertOrderByText(rootNode, VIEW_TEXT_UNOPEND_REDPACKET);
+            if(nodeInfo != null){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+    private void openRedPacket(){
+        AccessibilityNodeInfo nodeInfo = mUtil.searchViewPositiveSeqByClass(getRootInActiveWindow(), Button.class);
+        if(nodeInfo != null){
+            mUtil.performClick(nodeInfo);
+        }
+    }
+
+    private void findRedPacketView(AccessibilityEvent event){
+        AccessibilityNodeInfo activeWindow = getRootInActiveWindow();
+    }
+
 
     private void handlerCurrentListViewScrolled(AccessibilityEvent event){
         if(event.getClassName().toString().equals("android.widget.ListView")){
@@ -211,13 +287,13 @@ public class RedpacketAssistantService extends AccessibilityService{
         return null;
     }
 
-    private void openRedPacket(){
-        AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
-        AccessibilityNodeInfo openRedPacketBtn =  foreachViewForOpenBtn(rootInActiveWindow);
-//        if(openRedPacketBtn != null){
-//            openRedPacketBtn.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//        }
-    }
+//    private void openRedPacket(){
+//        AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
+//        AccessibilityNodeInfo openRedPacketBtn =  foreachViewForOpenBtn(rootInActiveWindow);
+////        if(openRedPacketBtn != null){
+////            openRedPacketBtn.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+////        }
+//    }
 
     private AccessibilityNodeInfo foreachViewForOpenBtn(AccessibilityNodeInfo nodeInfo){
         if(nodeInfo == null){
@@ -275,70 +351,12 @@ public class RedpacketAssistantService extends AccessibilityService{
 //        }
 //    }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void foreachViews(AccessibilityNodeInfo rootNode){
-        if(rootNode.getChildCount() == 0){
-            Log.d(TAG,"node info: final view ** class name = " + rootNode.getClassName() + ", id = " +  rootNode.getViewIdResourceName() + ",text = " + rootNode.getText()
-            + "desc = " + rootNode.getContentDescription() + "; window id = " + rootNode.getWindowId());
-            return;
-        }else{
-            Log.d(TAG,"node info: class name = " + rootNode.getClassName() + ", id = " +  rootNode.getViewIdResourceName() + ",text = " + rootNode.getText());
-            for(int i = 0 ; i < rootNode.getChildCount(); i ++){
-                AccessibilityNodeInfo child = rootNode.getChild(i);
-                foreachViews(child);
-            }
-        }
-    }
 
-    /**
-     * 找到对应描述的view
-     * @param rootNode
-     * @param description
-     * @return
-     */
-    private AccessibilityNodeInfo searchViewByDescription(AccessibilityNodeInfo rootNode,String description){
-        if(rootNode.getContentDescription() != null && description.equals(rootNode.getContentDescription().toString())){
-            Log.d(TAG,"find desc node !");
-            return rootNode;
-        }
 
-        if(rootNode.getChildCount() == 0){
-                Log.d(TAG,"getChildCount = 0!");
-                return null;
-        }else{
-            for(int i = 0; i < rootNode.getChildCount(); i ++){
-                AccessibilityNodeInfo child = rootNode.getChild(i);
-                AccessibilityNodeInfo resultNode = searchViewByDescription(child, description);
-                if(resultNode != null){
-                    Log.d(TAG,"return resultNode!");
-                    return resultNode;
-                }
-            }
-            return null;
-        }
-    }
 
-    /**
-     * 对应的node是指定的class
-     * @param node
-     * @param cls
-     * @return
-     */
-    private boolean isTargetViewType(AccessibilityNodeInfo node,Class<?> cls){
-        if(node == null || cls == null){
-            return false;
-        }
 
-        Log.d(TAG,"####node class = " + node.getClassName() + "; cls = " + cls.getName());
 
-        if(cls.getName().equals(node.getClassName())){
-            return true;
-        }else{
-            return false;
-        }
-    }
 
-    private void performHomeBtn(){
-        performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
-    }
+
+
 }
