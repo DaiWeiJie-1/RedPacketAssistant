@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2016/8/14.
@@ -45,6 +46,11 @@ public class RedpacketAssistantService extends AccessibilityService{
      * 红包界面判断未开红包
      */
     private static final String VIEW_TEXT_UNOPEND_REDPACKET = "给你发了一个红包";
+
+    /**
+     * 红包金额详情页面
+     */
+    private static final String VIEW_TEXT_READPACKET_DETAIL = "红包详情";
 
     private AccessibilityUtil mUtil;
 
@@ -81,7 +87,19 @@ public class RedpacketAssistantService extends AccessibilityService{
                     if(isUnopendRedpacket){
                         Log.d(TAG,"This is unopend redpacket !!!!!!!!!!!!");
                         openRedPacket();
-                        mUtil.performHomeBtn();
+//                        mUtil.performHomeBtn();
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        boolean redpacketDetailWindow = isRedpacketDetailWindow(getRootInActiveWindow());
+                        if(redpacketDetailWindow){
+                            Log.d(TAG,"This is redDetail !!!!!!!!!!!!");
+                            findRedpacketSum(getRootInActiveWindow());
+                        }else{
+                            Log.d(TAG,"This  not is redDetail !!!!!!!!!!!!");
+                        }
                     }
                 }
 
@@ -191,6 +209,15 @@ public class RedpacketAssistantService extends AccessibilityService{
         return false;
     }
 
+    private boolean isRedpacketDetailWindow(AccessibilityNodeInfo roootNode){
+        if(roootNode != null){
+            AccessibilityNodeInfo nodeInfo = mUtil.searchViewInvertOrderByText(roootNode, VIEW_TEXT_READPACKET_DETAIL);
+            if(nodeInfo != null){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void openRedPacket(){
         AccessibilityNodeInfo nodeInfo = mUtil.searchViewPositiveSeqByClass(getRootInActiveWindow(), Button.class);
@@ -198,6 +225,37 @@ public class RedpacketAssistantService extends AccessibilityService{
             mUtil.performClick(nodeInfo);
         }
     }
+
+    private String findRedpacketSum(AccessibilityNodeInfo rootNode){
+        if(rootNode == null){
+            return null;
+        }
+
+        Log.d(TAG,rootNode.getText() != null ? rootNode.getText().toString() : "");
+
+        if(rootNode.getText() != null && rootNode.getText() != null && Pattern.matches("[0-9]+.[0-9]+",rootNode.getText().toString())){
+            Log.d(TAG,"find sum ! " + rootNode.getText().toString());
+            return rootNode.getText().toString();
+        }
+
+        if(rootNode.getChildCount() == 0){
+            Log.d(TAG,"findRedpacketSum getChildCount = 0!");
+            return null;
+        }else{
+            //从最下找起
+            for(int i = rootNode.getChildCount() -1 ; i >=0 ; i --){
+                AccessibilityNodeInfo child = rootNode.getChild(i);
+                String sum = findRedpacketSum(child);
+                if(sum != null){
+                    Log.d(TAG,"return sum!");
+                    return sum;
+                }
+            }
+            return null;
+        }
+    }
+
+
 
     private void findRedPacketView(AccessibilityEvent event){
         AccessibilityNodeInfo activeWindow = getRootInActiveWindow();
