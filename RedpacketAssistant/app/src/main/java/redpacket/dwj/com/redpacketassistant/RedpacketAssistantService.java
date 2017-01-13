@@ -12,6 +12,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -43,9 +44,12 @@ public class RedpacketAssistantService extends AccessibilityService{
     private static final String VIEW_TEXT_REDPACKET_TALK_DETAIL_ACTIVITY = "领取红包";
 
     /**
-     * 红包界面判断未开红包
+     * 红包界面判断未开红包(定向红包)
      */
     private static final String VIEW_TEXT_UNOPEND_REDPACKET = "给你发了一个红包";
+
+    private static final String VIEW_TEXT_RAND_UNOPNED_REDPACKET = "发了一个红包";
+
 
     /**
      * 红包金额详情页面
@@ -59,10 +63,15 @@ public class RedpacketAssistantService extends AccessibilityService{
         super.onServiceConnected();
         mUtil = AccessibilityUtil.getInstance();
         mUtil.init(this);
+        Log.d("redpacket-service","onServiceConnected : " + new Date().toString());
     }
+
+
+
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+        Log.d("redpacket-service","onAccessibilityEvent start : " + new Date().toString());
         Log.d(TAG,"onAccessibilityEvent,eventType = " + accessibilityEvent.getEventType());
         int eventType = accessibilityEvent.getEventType();
         switch (eventType){
@@ -128,11 +137,12 @@ public class RedpacketAssistantService extends AccessibilityService{
 //                }
                 break;
         }
+        Log.d("redpacket-service","onAccessibilityEvent end : " + new Date().toString());
     }
 
     @Override
     public void onInterrupt() {
-
+        Log.d("redpacket-service","onInterrupt : " + new Date().toString());
     }
 
     /**
@@ -203,7 +213,13 @@ public class RedpacketAssistantService extends AccessibilityService{
             if(nodeInfo != null){
                 return true;
             }else{
-                return false;
+
+                AccessibilityNodeInfo randNodeInfo = mUtil.searchViewInvertOrderByText(rootNode, VIEW_TEXT_RAND_UNOPNED_REDPACKET);
+                if(randNodeInfo != null){
+                    return true;
+                }else{
+                    return false;
+                }
             }
         }
         return false;

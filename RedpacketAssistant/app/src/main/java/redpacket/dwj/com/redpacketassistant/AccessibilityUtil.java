@@ -112,6 +112,11 @@ public class AccessibilityUtil {
      * @return
      */
     public AccessibilityNodeInfo searchViewPositiveSeqByDescription(AccessibilityNodeInfo rootNode,String description){
+        if(rootNode == null){
+            return null;
+        }
+
+
         if(rootNode!= null && rootNode.getContentDescription() != null && description.equals(rootNode.getContentDescription().toString())){
             Log.d(TAG,"find desc node !");
             return rootNode;
@@ -140,6 +145,10 @@ public class AccessibilityUtil {
      * @return
      */
     public AccessibilityNodeInfo searchViewPositiveSeqByClass(AccessibilityNodeInfo rootNode,Class<?> cls){
+        if(rootNode == null){
+            return null;
+        }
+
         if(rootNode!= null && rootNode.getClassName() != null && cls.getName().equals(rootNode.getClassName().toString())){
             Log.d(TAG,"find class node !");
             return rootNode;
