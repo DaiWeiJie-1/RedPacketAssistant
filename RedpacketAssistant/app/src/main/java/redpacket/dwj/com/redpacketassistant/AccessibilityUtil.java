@@ -106,6 +106,42 @@ public class AccessibilityUtil {
 
 
     /**
+     * 找到对应包含text的view，从下方往上找
+     * @param rootNode
+     * @param textContent
+     * @return
+     */
+    public AccessibilityNodeInfo searchViewInvertContainsText(AccessibilityNodeInfo rootNode,String textContent){
+        if(rootNode == null){
+            return null;
+        }
+
+        Log.d(TAG,rootNode.getText() != null ? rootNode.getText().toString() : "");
+
+        if(rootNode.getText() != null && rootNode.getText().toString().contains(textContent)){
+            Log.d(TAG,"find textContext node !");
+            return rootNode;
+        }
+
+        if(rootNode.getChildCount() == 0){
+            Log.d(TAG,"searchViewByText getChildCount = 0!");
+            return null;
+        }else{
+            //从最下找起
+            for(int i = rootNode.getChildCount() -1 ; i >=0 ; i --){
+                AccessibilityNodeInfo child = rootNode.getChild(i);
+                AccessibilityNodeInfo resultNode = searchViewInvertContainsText(child, textContent);
+                if(resultNode != null){
+                    Log.d(TAG,"return searchViewByText!");
+                    return resultNode;
+                }
+            }
+            return null;
+        }
+    }
+
+
+    /**
      * 找到对应描述的view，从上往下找起
      * @param rootNode
      * @param description

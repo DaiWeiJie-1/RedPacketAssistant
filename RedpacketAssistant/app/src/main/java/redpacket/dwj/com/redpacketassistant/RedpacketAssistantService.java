@@ -48,7 +48,7 @@ public class RedpacketAssistantService extends AccessibilityService{
      */
     private static final String VIEW_TEXT_UNOPEND_REDPACKET = "给你发了一个红包";
 
-    private static final String VIEW_TEXT_RAND_UNOPNED_REDPACKET = "发了一个红包";
+    private static final String VIEW_TEXT_RAND_UNOPNED_REDPACKET = "金额随机";
 
 
     /**
@@ -214,7 +214,7 @@ public class RedpacketAssistantService extends AccessibilityService{
                 return true;
             }else{
 
-                AccessibilityNodeInfo randNodeInfo = mUtil.searchViewInvertOrderByText(rootNode, VIEW_TEXT_RAND_UNOPNED_REDPACKET);
+                AccessibilityNodeInfo randNodeInfo = mUtil.searchViewInvertContainsText(rootNode, VIEW_TEXT_RAND_UNOPNED_REDPACKET);
                 if(randNodeInfo != null){
                     return true;
                 }else{
